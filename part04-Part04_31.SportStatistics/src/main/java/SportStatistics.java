@@ -9,67 +9,66 @@ import java.util.logging.Logger;
 public class SportStatistics {
 
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        int count = 0;
-        int wins = 0;
+        Scanner scanner = new Scanner(System.in);
+        int gameCount = 0;
         int losses = 0;
+        int wins = 0;
+        
         System.out.println("File:");
-        String fileInput = scan.nextLine();
+        String fileName = scanner.nextLine();
 
         System.out.println("Team:");
-        String teamInput = scan.nextLine();
+        String teamInput = scanner.nextLine();
 
-        ArrayList<Team> teams = readStatisticsFromFile(fileInput);
+        ArrayList<Team> teams = sportStatisticsRecords(fileName);
+
         for (Team team : teams) {
             if (team.getHomeTeam().contains(teamInput)) {
-                count++;
-
-                if (team.homeTeamPoint() > team.visitingTeamPoint()) {
+                    if (team.getHomeTeamPt() >= team.getVisitingTeamPt()){
+                        wins++;
+                    }else{
+                        losses++;
+                    }
+                gameCount++;
+                
+            } else if (team.getVisitingTeam().contains(teamInput) ){
+                if(team.getVisitingTeamPt() >= team.getHomeTeamPt()){
                     wins++;
-                    team.setWins();
-                } else {
+                } else{
                     losses++;
-                    team.setLosses();
                 }
-                team.playGame();
-            } else if (team.getVisitingTeam().contains(teamInput)) {
-                count++;
-
-                if (team.visitingTeamPoint() > team.homeTeamPoint()) {
-                    wins++;
-                    team.setWins();
-                } else {
-                    losses++;
-                    team.setLosses();
-                }
-                team.playGame();
+                gameCount++;
+            } else {
+                continue;
             }
-
+            
         }
-        System.out.println("Games: " + count);
-//        System.out.println("wins: " + wins);
-//        System.out.println("Losses " + losses);
+        System.out.println("Games: "  + gameCount);
+        System.out.println("Wins: " + wins);
+        System.out.println("Losses: "  + losses);
+
     }
 
-    public static ArrayList<Team> readStatisticsFromFile(String file) {
-        ArrayList<Team> teams = new ArrayList<>();
+    public static ArrayList<Team> sportStatisticsRecords(String fileName) {
+        ArrayList<Team> sportRecord = new ArrayList();
 
-        try ( Scanner scan = new Scanner(Paths.get(file))) {
-            while (scan.hasNextLine()) {
-                String list = scan.nextLine();
-                String[] parts = list.split(",");
+        try (Scanner scanner = new Scanner(Paths.get(fileName))) {
+            while (scanner.hasNextLine()) {
+                String raw = scanner.nextLine();
+                String[] parts = raw.split(",");
 
                 String homeTeam = parts[0];
-                String VisitingTeam = parts[1];
-                int HomeTeamPoint = Integer.valueOf(parts[2]);
-                int VisitingTeamPoint = Integer.valueOf(parts[3]);
-                teams.add(new Team(homeTeam, VisitingTeam, HomeTeamPoint, VisitingTeamPoint));
-            }
+                String visitingTeam = parts[01];
+                int homeTeamPt = Integer.valueOf(parts[2]);
+                int visitingTeamPt = Integer.valueOf(parts[3]);
 
+                sportRecord.add(new Team(homeTeam, visitingTeam, homeTeamPt, visitingTeamPt));
+
+            }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
 
-        return teams;
+        return sportRecord;
     }
 }
