@@ -1,0 +1,1 @@
+I used this Git repository as a Git practice and to keep track of my code practing of Java MOOC. Most codes & projects come from the University of Helsinki’s massive open online course (MOOC) on Java Programming: [Java Programming I](https://java-programming.mooc.fi/)
